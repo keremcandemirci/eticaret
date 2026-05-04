@@ -396,7 +396,7 @@
         function handleShare(platform) {
             if(!currentUser) return alert("Puan kazanmak için önce Google ile giriş yapmalısın!");
             
-            <meta property="og:url" content="https://project-d8ws3.vercel.app/" />
+            const trackingLink = `https://project-d8ws3.vercel.app/=${platform}&aff_id=${currentUser.uid}`;
             
             if(platform === 'instagram') {
                 navigator.clipboard.writeText(`Bu ürünü kesinlikle incelemelisin! Link: ${trackingLink}`).then(() => {
