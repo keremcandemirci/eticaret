@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GamerDükkan | Pro Influencer Platform</title>
+
+    <meta property="og:title" content="GamerDükkan - Efsane Ekipmanlar" />
+    <meta property="og:description" content="Paylaş, Puan Kazan, Marka Elçimiz Ol!" />
+    <meta property="og:image" content="https://images.unsplash.com/photo-1599669454699-248893623440?w=800&q=80" />
+    
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        :root {
+            --primary: #4f46e5; 
+            --primary-hover: #4338ca;
+            --secondary: #f59e0b; 
+            --bg-body: #f3f4f6;
+            --bg-card: #ffffff;
+            --text-dark: #111827;
+            --text-gray: #6b7280;
+            --border: #e5e7eb;
+            --instagram: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
+        }
+
+        body { font-family: 'Inter', sans-serif; background-color: var(--bg-body); color: var(--text-dark); margin: 0; padding-bottom: 50px; }
+        
+        .navbar { background: #ffffff; padding: 15px 5%; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); position: sticky; top: 0; z-index: 100; }
+        .brand { font-size: 24px; font-weight: 800; color: var(--primary); display: flex; align-items: center; gap: 10px;}
+        
+        .nav-actions { display: flex; align-items: center; gap: 15px; }
+        .wallet { display: none; align-items: center; gap: 8px; background: #fffbeb; border: 1px solid #fde68a; padding: 6px 12px; border-radius: 8px; font-weight: 700; color: #d97706; }
+        
+        .tier-badge { display: none; align-items: center; gap: 5px; padding: 6px 10px; border-radius: 8px; font-weight: 800; font-size: 13px; text-transform: uppercase; color: white;}
+        .tier-bronz { background: linear-gradient(45deg, #a05a2c, #cd7f32); }
+        .tier-gumus { background: linear-gradient(45deg, #64748b, #94a3b8); }
+        .tier-altin { background: linear-gradient(45deg, #d97706, #fbbf24); }
+
+        .btn-login { background: var(--primary); color: white; padding: 10px 20px; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 8px; }
+        .user-menu { display: none; align-items: center; gap: 15px; }
+        .btn-logout { background: transparent; border: none; color: #ef4444; font-size: 18px; cursor: pointer; }
+
+        .nav-tabs { background: white; padding: 0 5%; display: flex; gap: 30px; border-bottom: 1px solid var(--border); overflow-x: auto; }
+        .nav-tab { padding: 15px 0; color: var(--text-gray); font-weight: 500; cursor: pointer; border-bottom: 2px solid transparent; white-space: nowrap; }
+        .nav-tab.active { color: var(--primary); border-bottom-color: var(--primary); font-weight: 600; }
+        .nav-tab-purple { color: #8b5cf6; } .nav-tab-purple.active { border-bottom-color: #8b5cf6; }
+        .nav-tab-gold { color: #d97706; } .nav-tab-gold.active { border-bottom-color: #d97706; }
+
+        .hero { background: linear-gradient(90deg, #111827 0%, #374151 100%); color: white; padding: 40px 5%; display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; border-radius: 0 0 20px 20px;}
+        .container { padding: 0 5%; max-width: 1400px; margin: 0 auto; }
+        .section-header { margin: 0 0 20px 0; font-size: 20px; font-weight: 700; display: flex; align-items: center; gap: 10px;}
+
+        /* ÜRÜN KARTLARI */
+        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 20px; }
+        .card { background: var(--bg-card); border-radius: 12px; overflow: hidden; border: 1px solid var(--border); transition: 0.3s; display: flex; flex-direction: column; cursor: pointer;}
+        .card:hover { transform: translateY(-5px); border-color: var(--primary);}
+        .card-img-wrap { height: 200px; overflow: hidden; background: #f8f9fa; display: flex; align-items: center; justify-content: center;}
+        .card img { width: 100%; height: 100%; object-fit: cover; transition: 0.5s;}
+        .card-body { padding: 15px; flex-grow: 1; display: flex; flex-direction: column;}
+        .card-title { font-size: 14px; font-weight: 600; margin: 0 0 10px 0; flex-grow: 1;}
+        .card-price { font-size: 18px; font-weight: 800; color: var(--primary); }
+
+        /* ÖDÜL MARKETİ EKRANI (GERİ GELDİ) */
+        .loyalty-dashboard { background: white; border-radius: 16px; padding: 25px; border: 1px solid var(--border); margin-bottom: 30px; box-shadow: 0 4px 10px rgba(0,0,0,0.03);}
+        .progress-header { display: flex; justify-content: space-between; margin-bottom: 10px; font-weight: 600;}
+        .progress-bar-bg { width: 100%; height: 12px; background: #e5e7eb; border-radius: 10px; overflow: hidden;}
+        .progress-bar-fill { height: 100%; background: linear-gradient(90deg, var(--secondary), #fcd34d); width: 0%; transition: 1s ease-out;}
+        
+        .coupon-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px;}
+        .coupon-card { background: white; border: 1px solid var(--border); border-radius: 12px; padding: 20px; display: flex; align-items: center; gap: 20px;}
+        .coupon-icon { width: 60px; height: 60px; background: #fef3c7; color: #d97706; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 24px;}
+        .btn-buy-coupon { background: var(--text-dark); color: white; padding: 8px 15px; border-radius: 6px; border: none; cursor: pointer; font-weight: 600; width: 100%; margin-top: 10px;}
+
+        /* INFLUENCER PANELİ */
+        .kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-bottom: 30px;}
+        .kpi-card { background: white; padding: 20px; border-radius: 12px; border: 1px solid var(--border); display: flex; flex-direction: column; gap: 5px;}
+        .kpi-val { font-size: 28px; font-weight: 800; color: var(--text-dark);}
+        .kpi-label { font-size: 12px; color: var(--text-gray); text-transform: uppercase; font-weight: 600;}
+
+        .table-container { background: white; border-radius: 12px; border: 1px solid var(--border); overflow: hidden; overflow-x: auto;}
+        table { width: 100%; border-collapse: collapse; min-width: 600px;}
+        th { background: #f9fafb; padding: 15px; text-align: left; font-size: 12px; color: var(--text-gray); text-transform: uppercase;}
+        td { padding: 15px; border-bottom: 1px solid var(--border); font-size: 14px; vertical-align: middle;}
+        .tbl-product { display: flex; align-items: center; gap: 10px; font-weight: 600;}
+        .badge-wa { background: #25D366; color: white; padding: 4px 8px; border-radius: 4px; font-size: 11px; font-weight: bold;}
+        .badge-tw { background: #1DA1F2; color: white; padding: 4px 8px; border-radius: 4px; font-size: 11px; font-weight: bold;}
+        .badge-ig { background: var(--instagram); color: white; padding: 4px 8px; border-radius: 4px; font-size: 11px; font-weight: bold;}
+
+        /* MODAL */
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 1000; justify-content: center; align-items: center; padding: 20px; }
+        .modal-content { background: white; width: 100%; max-width: 850px; border-radius: 16px; overflow: hidden; display: flex; flex-direction: column; position: relative;}
+        @media(min-width: 768px) { .modal-content { flex-direction: row; } }
+        .modal-left { flex: 1; background: #f8f9fa; }
+        .modal-left img { width: 100%; height: 100%; object-fit: cover; }
+        .modal-right { flex: 1; padding: 30px; display: flex; flex-direction: column; justify-content: center;}
+        .close-btn { position: absolute; top: 15px; right: 20px; font-size: 24px; color: var(--text-gray); cursor: pointer; border: none; background: transparent; z-index: 10;}
+        
+        .btn-primary { background: var(--primary); color: white; padding: 14px; border: none; border-radius: 8px; font-size: 16px; font-weight: 600; cursor: pointer; width: 100%; margin-bottom: 15px;}
+        
+        .share-box { background: #f9fafb; border: 1px dashed var(--border); padding: 15px; border-radius: 8px;}
+        .share-buttons { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px;}
+        .btn-social { padding: 10px; border: none; border-radius: 6px; font-weight: 600; cursor: pointer; color: white; font-size: 12px; display: flex; flex-direction: column; align-items: center; gap: 5px;}
+        .bg-wa { background: #25D366; } .bg-tw { background: #1DA1F2; } .bg-ig { background: var(--instagram); }
+
+        .toast { position: fixed; bottom: 30px; right: 30px; background: #111827; color: white; padding: 15px 25px; border-radius: 8px; font-weight: 600; display: none; z-index: 9999; border-left: 4px solid var(--secondary); box-shadow: 0 10px 15px rgba(0,0,0,0.1);}
+    </style>
+</head>
+<body>
+
+    <div id="toast" class="toast">Bildirim</div>
+
+    <nav class="navbar">
+        <div class="brand"><i class="fa-solid fa-gamepad"></i> GamerDükkan</div>
+        <div class="nav-actions">
+            <div id="tier-badge" class="tier-badge tier-bronz"><i class="fa-solid fa-medal"></i> <span id="tier-name">Bronz</span></div>
+            <div id="wallet" class="wallet"><i class="fa-solid fa-coins"></i> <span id="user-points-display">0</span> Puan</div>
+            <button id="login-btn" class="btn-login"><i class="fa-brands fa-google"></i> Giriş Yap</button>
+            <div id="user-menu" class="user-menu">
+                <div id="user-profile" style="font-weight: 600; font-size: 14px;"></div>
+                <button id="logout-btn" class="btn-logout"><i class="fa-solid fa-right-from-bracket"></i></button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="nav-tabs" id="tabs-section">
+        <div class="nav-tab active" data-target="store-view"><i class="fa-solid fa-store"></i> Mağaza</div>
+        <div class="nav-tab nav-tab-purple" data-target="influencer-view"><i class="fa-solid fa-bullhorn"></i> Influencer Paneli</div>
+        <div class="nav-tab nav-tab-gold" data-target="market-view"><i class="fa-solid fa-gift"></i> Ödül Marketi</div>
+        <div class="nav-tab" data-target="purchases-view"><i class="fa-solid fa-box-open"></i> Siparişlerim</div>
+    </div>
+
+    <!-- MAĞAZA -->
+    <div id="store-view">
+        <div class="hero">
+            <div style="padding-left: 5%;">
+                <h1 style="color:var(--secondary);">Sosyal Satış Ortağımız Ol!</h1>
+                <p>Ürünlerimizi Instagram, WhatsApp veya Twitter'da paylaş; tıklanma ve satışlardan anında komisyon (puan) kazan.</p>
+            </div>
+        </div>
+        <div class="container"><div class="grid" id="store-grid"></div></div>
+    </div>
+
+    <!-- YENİ: EKSİKSİZ INFLUENCER PANELİ -->
+    <div id="influencer-view" class="container" style="display: none; padding-top: 30px;">
+        <h2 class="section-header"><i class="fa-solid fa-chart-line"></i> Performans & İstatistikler</h2>
+        
+        <div class="kpi-grid">
+            <div class="kpi-card"><span class="kpi-label">Toplam Tıklanma</span><span class="kpi-val" id="kpi-clicks">0</span></div>
+            <div class="kpi-card"><span class="kpi-label" style="color:#dc2743;">Instagram Trafiği</span><span class="kpi-val" id="kpi-ig-clicks">0</span></div>
+            <div class="kpi-card"><span class="kpi-label" style="color:var(--primary);">Satış (Dönüşüm)</span><span class="kpi-val" id="kpi-conversions">0</span></div>
+            <div class="kpi-card"><span class="kpi-label" style="color:#d97706;">Kazanılan Puan</span><span class="kpi-val" id="kpi-earned">0</span></div>
+        </div>
+
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr><th>Paylaşılan Ürün</th><th>Kanal</th><th>Tarih</th><th>Tıklanma</th><th>Satış</th><th>Kazanç</th></tr>
+                </thead>
+                <tbody id="share-table-body"></tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- ÖDÜL MARKETİ & SEVİYE SİSTEMİ (GERİ GELDİ) -->
+    <div id="market-view" class="container" style="display: none; padding-top: 30px;">
+        <div class="loyalty-dashboard">
+            <div class="progress-header">
+                <span>Mevcut Seviyen: <span id="dash-tier-name" style="color: var(--secondary);">Bronz Temsilci</span></span>
+                <span id="dash-points">0 / 200 Puan</span>
+            </div>
+            <div class="progress-bar-bg"><div class="progress-bar-fill" id="tier-progress"></div></div>
+            <div style="font-size: 13px; color: var(--text-gray); margin-top: 8px;">Sosyal medyada paylaştıkça seviyeniz yükselir. (Paylaşım Başı: +50 Puan)</div>
+        </div>
+
+        <h2 class="section-header">Puanlarını Harca</h2>
+        <div class="coupon-grid">
+            <div class="coupon-card">
+                <div class="coupon-icon"><i class="fa-solid fa-ticket"></i></div>
+                <div style="flex:1;">
+                    <h4 style="margin:0 0 5px 0;">%20 İndirim Kuponu</h4>
+                    <button class="btn-buy-coupon" onclick="buyCoupon(150, '%20 İndirim Kuponu')">150 Puan ile Al</button>
+                </div>
+            </div>
+            <div class="coupon-card">
+                <div class="coupon-icon"><i class="fa-solid fa-truck"></i></div>
+                <div style="flex:1;">
+                    <h4 style="margin:0 0 5px 0;">Bedava Kargo</h4>
+                    <button class="btn-buy-coupon" onclick="buyCoupon(100, 'Bedava Kargo')">100 Puan ile Al</button>
+                </div>
+            </div>
+        </div>
+
+        <h2 class="section-header" style="margin-top: 40px;">Kupon Cüzdanım</h2>
+        <div id="my-coupons" style="background: white; padding: 20px; border-radius: 12px; border: 1px solid var(--border);"></div>
+    </div>
+
+    <!-- SİPARİŞLERİM -->
+    <div id="purchases-view" class="container" style="display: none; padding-top: 30px;">
+        <h2 class="section-header"><i class="fa-solid fa-box"></i> Sipariş Geçmişim</h2>
+        <div class="grid" id="purchases-grid"></div>
+    </div>
+
+    <!-- MODAL -->
+    <div class="modal" id="product-modal">
+        <div class="modal-content">
+            <button class="close-btn" id="close-modal"><i class="fa-solid fa-xmark"></i></button>
+            <div class="modal-left"><img id="m-img" src=""></div>
+            <div class="modal-right">
+                <h2 id="m-title" style="margin: 0 0 10px 0; font-size:22px;"></h2>
+                <div id="m-price" style="font-size: 26px; font-weight: 800; color: var(--primary); margin-bottom: 20px;"></div>
+                
+                <button class="btn-primary" id="btn-buy"><i class="fa-solid fa-cart-shopping"></i> Siparişi Tamamla</button>
+                
+                <div class="share-box">
+                    <p style="text-align: center; font-size: 13px; font-weight: 700; margin-bottom: 10px;">🔥 Linkini Paylaş, +50 Puan Kazan!</p>
+                    <div class="share-buttons">
+                        <button class="btn-social bg-wa" id="share-wa"><i class="fa-brands fa-whatsapp fa-xl"></i> WhatsApp</button>
+                        <button class="btn-social bg-tw" id="share-tw"><i class="fa-brands fa-twitter fa-xl"></i> Twitter</button>
+                        <button class="btn-social bg-ig" id="share-ig"><i class="fa-brands fa-instagram fa-xl"></i> Instagram</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getAuth, signInWithPopup, GoogleAuthProvider, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+
+        // *** KENDİ FIREBASE BİLGİLERİNİ BURAYA YAPIŞTIR ***
+        const firebaseConfig = {
+            apiKey: "AIzaSyBK3liYj3quLHAjqjbL2T40aXik5qxITFc",
+            authDomain: "e-ticaret-32799.firebaseapp.com",
+            projectId: "e-ticaret-32799",
+            storageBucket: "e-ticaret-32799.firebasestorage.app",
+            messagingSenderId: "865455301273",
+            appId: "1:865455301273:web:a1e37e40aa8458daa60e08",
+            measurementId: "G-RQM1593JFS"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const provider = new GoogleAuthProvider();
+
+        const products = [
+            { id: 1, name: "Logitech Pro X 7.1 Surround", price: "₺3.299", img: "https://images.unsplash.com/photo-1599669454699-248893623440?w=500&q=80" },
+            { id: 2, name: "Razer BlackWidow V3 Mekanik", price: "₺2.899", img: "https://images.unsplash.com/photo-1595225476474-87563907a212?w=500&q=80" },
+            { id: 3, name: "SteelSeries Aerox 3 Gamer Mouse", price: "₺1.499", img: "https://images.unsplash.com/photo-1605773527852-c546a8584ea3?w=500&q=80" },
+            { id: 4, name: "Asus TUF Gaming 27\" Monitör", price: "₺6.499", img: "https://images.unsplash.com/photo-1525547719571-a2d4ac8945e2?w=500&q=80" },
+            { id: 5, name: "HyperX QuadCast S RGB Mikrofon", price: "₺4.199", img: "https://images.unsplash.com/photo-1590602847861-f357a9332bbc?w=500&q=80" },
+            { id: 6, name: "xDrive Toryum Profesyonel Koltuk", price: "₺5.999", img: "https://images.unsplash.com/photo-1598550476439-6847785fcea6?w=500&q=80" },
+            { id: 7, name: "Corsair MM700 RGB Mousepad", price: "₺1.249", img: "https://images.unsplash.com/photo-1616588589676-62b3bd4ff6d2?w=500&q=80" },
+            { id: 8, name: "Sony DualSense Kontrol Cihazı", price: "₺2.799", img: "https://images.unsplash.com/photo-1600080972464-8e5f35f63d08?w=500&q=80" },
+            { id: 9, name: "Logitech C922 Pro Webcam", price: "₺2.499", img: "https://images.unsplash.com/photo-1526628953301-3e589a6a8b74?w=500&q=80" },
+            { id: 10, name: "Cooler Master MF120 Kasa Fanı", price: "₺899", img: "https://images.unsplash.com/photo-1587202372634-32705e3bf49c?w=500&q=80" }
+        ];
+
+        let currentUser = null;
+        let selectedProduct = null;
+        
+        let purchasedList = JSON.parse(localStorage.getItem('purchases')) || [];
+        let shareHistory = JSON.parse(localStorage.getItem('share_history')) || [];
+        let userPoints = parseInt(localStorage.getItem('user_points')) || 0;
+        let lifetimePoints = parseInt(localStorage.getItem('lifetime_points')) || userPoints;
+        let myCoupons = JSON.parse(localStorage.getItem('my_coupons')) || [];
+
+        function showToast(msg) {
+            const t = document.getElementById('toast');
+            t.innerHTML = `<i class="fa-solid fa-bell" style="color: #fbbf24; margin-right:5px;"></i> ${msg}`;
+            t.style.display = 'block';
+            setTimeout(() => t.style.display = 'none', 3000);
+        }
+
+        // SEVİYE SİSTEMİ (TIER)
+        function updateTierSystem() {
+            document.getElementById('user-points-display').innerText = userPoints;
+            document.getElementById('dash-points').innerText = `${lifetimePoints} Puan`;
+            
+            const badge = document.getElementById('tier-badge');
+            const tierName = document.getElementById('tier-name');
+            const dashTierName = document.getElementById('dash-tier-name');
+            const progressBar = document.getElementById('tier-progress');
+            
+            badge.className = 'tier-badge'; 
+            let progress = 0;
+
+            if(lifetimePoints < 200) {
+                badge.classList.add('tier-bronz');
+                tierName.innerText = "Bronz";
+                dashTierName.innerText = "Bronz Temsilci";
+                dashTierName.style.color = "#d97706";
+                progress = (lifetimePoints / 200) * 100;
+                document.getElementById('dash-points').innerText = `${lifetimePoints} / 200 Puan (Sonraki: Gümüş)`;
+            } else if(lifetimePoints < 500) {
+                badge.classList.add('tier-gumus');
+                tierName.innerText = "Gümüş";
+                dashTierName.innerText = "Gümüş Temsilci";
+                dashTierName.style.color = "#94a3b8";
+                progress = ((lifetimePoints - 200) / 300) * 100;
+                document.getElementById('dash-points').innerText = `${lifetimePoints} / 500 Puan (Sonraki: Altın)`;
+            } else {
+                badge.classList.add('tier-altin');
+                tierName.innerText = "Altın";
+                dashTierName.innerText = "Altın Temsilci";
+                dashTierName.style.color = "#fbbf24";
+                progress = 100;
+                document.getElementById('dash-points').innerText = `${lifetimePoints} Puan`;
+            }
+            progressBar.style.width = `${progress}%`;
+        }
+
+        // ÜRÜN ÇİZİMİ (Mağaza & Siparişler)
+        function renderProducts(list, container) {
+            container.innerHTML = "";
+            if(list.length === 0 && container.id === "purchases-grid") {
+                container.innerHTML = "<p style='color:gray;'>Henüz hiç siparişiniz yok.</p>"; return;
+            }
+            list.forEach(p => {
+                const div = document.createElement('div');
+                div.className = 'card';
+                div.innerHTML = `<div class="card-img-wrap"><img src="${p.img}"></div><div class="card-body"><div class="card-title">${p.name}</div><div class="card-price">${p.price}</div></div>`;
+                div.onclick = () => {
+                    selectedProduct = p;
+                    document.getElementById('m-img').src = p.img;
+                    document.getElementById('m-title').innerText = p.name;
+                    document.getElementById('m-price').innerText = p.price;
+                    document.getElementById('btn-buy').style.display = list === purchasedList ? 'none' : 'block';
+                    document.getElementById('product-modal').style.display = 'flex';
+                };
+                container.appendChild(div);
+            });
+        }
+
+        // KUPON SİSTEMİ
+        window.buyCoupon = (cost, name) => {
+            if (!currentUser) return alert("Önce giriş yapmalısınız.");
+            if (userPoints < cost) return alert("Yetersiz puan! Ürünleri sosyal medyada paylaşarak puan kazanabilirsiniz.");
+            
+            userPoints -= cost;
+            localStorage.setItem('user_points', userPoints);
+            myCoupons.push(name);
+            localStorage.setItem('my_coupons', JSON.stringify(myCoupons));
+            
+            renderCoupons();
+            updateTierSystem();
+            alert(`Tebrikler! ${name} hesabınıza başarıyla eklendi.`);
+        };
+
+        function renderCoupons() {
+            const container = document.getElementById('my-coupons');
+            if(myCoupons.length === 0) { container.innerHTML = "<span style='color:gray;'>Henüz kuponunuz yok.</span>"; return; }
+            container.innerHTML = myCoupons.map(c => `<div style="padding: 10px 0; border-bottom: 1px solid #e5e7eb;"><i class="fa-solid fa-check-circle" style="color: #10b981;"></i> ${c}</div>`).join('');
+        }
+
+        // INFLUENCER PANELİ GÜNCELLEME
+       function renderInfluencerPanel() {
+            const body = document.getElementById('share-table-body');
+            body.innerHTML = "";
+            let igClicks = 0, totalClicks = 0, totalConv = 0, totalPoints = 0;
+
+            if(shareHistory.length === 0) {
+                body.innerHTML = `<tr><td colspan="6" style="text-align:center; color:gray;">Henüz paylaşımınız yok.</td></tr>`;
+            } else {
+                shareHistory.forEach(s => {
+                    // HATA DÜZELTME: Eski kaydedilmiş verilerle yeni kodun çakışmaması için yedek kontrol
+                    let pName = s.product || s.productName || "Bilinmeyen Ürün";
+                    let pImg = s.img || s.productImg || "https://images.unsplash.com/photo-1599669454699-248893623440?w=50&q=80";
+                    let pConv = s.conversions || 0; // Eski veride dönüşüm yoksa 0 say.
+                    
+                    totalClicks += s.clicks;
+                    if(s.platform === 'instagram') igClicks += s.clicks;
+                    totalConv += pConv;
+                    totalPoints += s.points;
+
+                    let badge = s.platform === 'instagram' ? 'badge-ig' : (s.platform === 'whatsapp' ? 'badge-wa' : 'badge-tw');
+                    body.innerHTML += `<tr>
+                        <td><div class="tbl-product"><img src="${pImg}" style="width:30px; height:30px; border-radius:4px; object-fit:cover;"> ${pName}</div></td>
+                        <td><span class="${badge}">${s.platform.toUpperCase()}</span></td>
+                        <td style="color:gray;">${s.date}</td>
+                        <td style="font-weight:bold;">${s.clicks}</td>
+                        <td style="font-weight:bold; color:var(--primary);">${pConv}</td>
+                        <td style="font-weight:bold; color:var(--secondary)">+${s.points} 🪙</td>
+                    </tr>`;
+                });
+            }
+
+            document.getElementById('kpi-clicks').innerText = totalClicks;
+            document.getElementById('kpi-ig-clicks').innerText = igClicks;
+            document.getElementById('kpi-conversions').innerText = totalConv;
+            document.getElementById('kpi-earned').innerText = totalPoints;
+        }
+
+        // PAYLAŞIM VE SİMÜLASYON
+        function handleShare(platform) {
+            if(!currentUser) return alert("Puan kazanmak için önce Google ile giriş yapmalısın!");
+            
+            const trackingLink = `https://visionary-paletas-33466e.netlify.app?utm_source=${platform}&aff_id=${currentUser.uid}`;
+            
+            if(platform === 'instagram') {
+                navigator.clipboard.writeText(`Bu ürünü kesinlikle incelemelisin! Link: ${trackingLink}`).then(() => {
+                    showToast("Takip Linkin Kopyalandı! Instagram Story'ne ekleyebilirsin.");
+                });
+            } else if(platform === 'whatsapp') {
+                window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent("Şuna baksana efsane: " + trackingLink)}`, '_blank');
+            } else {
+                window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent("Favori ekipmanım!")}&url=${encodeURIComponent(trackingLink)}`, '_blank');
+            }
+
+            // Simülasyon: Tıklanma ve Dönüşüm (Satış)
+            const clicks = Math.floor(Math.random() * 40) + 5;
+            const conversions = Math.random() > 0.75 ? Math.floor(Math.random() * 2) + 1 : 0; // %25 ihtimalle satış olur
+
+            const shareData = {
+                product: selectedProduct.name,
+                img: selectedProduct.img,
+                platform: platform,
+                clicks: clicks,
+                conversions: conversions,
+                points: 50,
+                date: new Date().toLocaleDateString('tr-TR')
+            };
+
+            shareHistory.unshift(shareData);
+            localStorage.setItem('share_history', JSON.stringify(shareHistory));
+            
+            userPoints += 50;
+            lifetimePoints += 50;
+            localStorage.setItem('user_points', userPoints);
+            localStorage.setItem('lifetime_points', lifetimePoints);
+            
+            updateTierSystem();
+            if(platform !== 'instagram') showToast("+50 Puan Kazandın!");
+        }
+
+        // EVENT LISTENERS
+        document.getElementById('share-wa').onclick = () => handleShare('whatsapp');
+        document.getElementById('share-tw').onclick = () => handleShare('twitter');
+        document.getElementById('share-ig').onclick = () => handleShare('instagram');
+        
+        document.getElementById('btn-buy').onclick = () => {
+            if(!currentUser) return alert("Sipariş için giriş yapın.");
+            purchasedList.push(selectedProduct);
+            localStorage.setItem('purchases', JSON.stringify(purchasedList));
+            alert("Sipariş onaylandı! Puan verilmedi (Sadece paylaşımdan puan kazanılır).");
+            document.getElementById('product-modal').style.display = 'none';
+            renderProducts(purchasedList, document.getElementById('purchases-grid'));
+        };
+
+        document.getElementById('close-modal').onclick = () => document.getElementById('product-modal').style.display = 'none';
+        document.getElementById('login-btn').onclick = () => signInWithPopup(auth, provider);
+        document.getElementById('logout-btn').onclick = () => signOut(auth).then(() => window.location.reload());
+
+        onAuthStateChanged(auth, (user) => {
+            if(user) {
+                currentUser = user;
+                document.getElementById('login-btn').style.display = 'none';
+                document.getElementById('user-menu').style.display = 'flex';
+                document.getElementById('user-profile').innerText = user.displayName.split(' ')[0];
+                document.getElementById('wallet').style.display = 'flex';
+                document.getElementById('tier-badge').style.display = 'flex';
+                
+                updateTierSystem();
+                renderCoupons();
+                renderProducts(purchasedList, document.getElementById('purchases-grid'));
+            }
+        });
+
+        document.querySelectorAll('.nav-tab').forEach(t => {
+            t.onclick = (e) => {
+                const target = e.target.dataset.target;
+                if(target !== 'store-view' && !currentUser) return alert("Lütfen önce Google ile giriş yapın.");
+                
+                document.querySelectorAll('.nav-tab').forEach(tab => tab.classList.remove('active'));
+                e.target.classList.add('active');
+                
+                ['store-view','influencer-view','purchases-view','market-view'].forEach(id => document.getElementById(id).style.display = 'none');
+                document.getElementById(target).style.display = 'block';
+                
+                if(target === 'influencer-view') renderInfluencerPanel();
+                if(target === 'market-view') { renderCoupons(); updateTierSystem(); }
+            }
+        });
+
+        // BAŞLANGIÇ
+        renderProducts(products, document.getElementById('store-grid'));
+    </script>
+</body>
+</html>
